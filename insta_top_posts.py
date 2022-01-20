@@ -73,42 +73,43 @@ class Reboot():
         driver.find_element_by_xpath('//*[@id="MAIN_OFF"]/table/tbody/tr[4]/td/table/tbody/tr[8]/td[2]/span/input').click()
         time.sleep(3)
         webdriver.common.alert.Alert(driver).accept()
-# ------------------------------Hyper Parameter------------------------------
-today = datetime.today().strftime("%m%d")
-egg_id = 'user'
-egg_pw = '!InfoEgg16404'
-data_list = []
-crawl_list = db_connection()
-egg = Reboot(egg_id, egg_pw)
 
-while len(crawl_list) > 0:
-    for li in tqdm(crawl_list[:].iterrows(), desc = '돌리는 중'):
-        product_code = li[1]['product_code']
-        search_query = li[1]['search_query']
-        print(search_query)
-        L = instaloader.Instaloader(download_pictures = False, download_videos = False, download_video_thumbnails = False,
-                                    download_geotags = False, download_comments = False, save_metadata = False,
-                                    max_connection_attempts=1)
+if __name__=="__main__":
+    today = datetime.today().strftime("%m%d")
+    egg_id = 'user'
+    egg_pw = '!InfoEgg16404'
+    data_list = []
+    crawl_list = db_connection()
+    egg = Reboot(egg_id, egg_pw)
 
-        try:
-            hashtag = instaloader.Hashtag.from_name(L.context, search_query).get_top_posts()
-            
-            for post in hashtag:
-                img_url = post.url
-                post_url = f'https://www.instagram.com/p/{post.shortcode}'
+    while len(crawl_list) > 0:
+        for li in tqdm(crawl_list[:].iterrows(), desc = '돌리는 중'):
+            product_code = li[1]['product_code']
+            search_query = li[1]['search_query']
+            print(search_query)
+            L = instaloader.Instaloader(download_pictures = False, download_videos = False, download_video_thumbnails = False,
+                                        download_geotags = False, download_comments = False, save_metadata = False,
+                                        max_connection_attempts=1)
+
+            try:
+                hashtag = instaloader.Hashtag.from_name(L.context, search_query).get_top_posts()
                 
-                data = {"product_code" : product_code,
-                        "search_query" : search_query,
-                        "image_url" : img_url,
-                        "instagram_url" : post_url}
-                data_list.append(data)
-            crawl_list.drop(crawl_list.index[0], inplace = True)
+                for post in hashtag:
+                    img_url = post.url
+                    post_url = f'https://www.instagram.com/p/{post.shortcode}'
+                    
+                    data = {"product_code" : product_code,
+                            "search_query" : search_query,
+                            "image_url" : img_url,
+                            "instagram_url" : post_url}
+                    data_list.append(data)
+                crawl_list.drop(crawl_list.index[0], inplace = True)
 
-        except instaloader.LoginRequiredException:
-            print('Turn off and turn on the kt EGG!')
-            egg.get_egg()
-            time.sleep(90)
-        except instaloader.ConnectionException:
-            time.sleep(100)
+            except instaloader.LoginRequiredException:
+                print('Turn off and turn on the kt EGG!')
+                egg.get_egg()
+                time.sleep(90)
+            except instaloader.ConnectionException:
+                time.sleep(100)
 
-result_save(data_list, today).save()
+    result_save(data_list, today).save()

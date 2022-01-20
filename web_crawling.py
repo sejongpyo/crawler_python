@@ -7,7 +7,7 @@ import pandas as pd
 # DB connection
 db = pymysql.connect(host     = 'localhost',
                      user     = 'root',
-                     password = '950912',
+                     password = '',
                      db       = 'lotto',
                      )
 

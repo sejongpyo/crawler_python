@@ -21,10 +21,9 @@ options.add_argument("lang=ko_KR")
 driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
 
 # 로그인하기 위한 아이디 비번 입력
-insta_id = 'staypia.official'
-insta_pw = '!@12Celebs'
+insta_id = ''
+insta_pw = ''
 
-# -----------함-----수-----------------------------------------------
 class Login:
     def __init__(self, id, pw):
         self.id = id
@@ -60,47 +59,46 @@ Learn more,
 '''
     return msg
 
-    # ----------메-----인--------------------------------------------------
+if __name__=="__main__":
+    # 로그인
+    login = Login(insta_id, insta_pw)
+    login.insta()
+    time.sleep(5)
 
-# 로그인
-login = Login(insta_id, insta_pw)
-login.insta()
-time.sleep(5)
+    # url 인덱싱을 위한 파일 읽어오기
+    send_list = pd.read_excel("list_to_send.xlsx")
+    for id in tqdm(range(10), desc = '보내는중'):
+        star_id = send_list['star_id'][id].replace('@', '')
+        star_name = send_list['star_name'][id]
+        
+        #print(star_id)
 
-# url 인덱싱을 위한 파일 읽어오기
-send_list = pd.read_excel("list_to_send.xlsx")
-for id in tqdm(range(10), desc = '보내는중'):
-    star_id = send_list['star_id'][id].replace('@', '')
-    star_name = send_list['star_name'][id]
-    
-    #print(star_id)
+        # DM 창으로 이동
+        driver.get("https://www.instagram.com/direct/inbox/")
+        time.sleep(t)
 
-    # DM 창으로 이동
-    driver.get("https://www.instagram.com/direct/inbox/")
-    time.sleep(t)
+        # 메시지 보내기 버튼 클릭
+        driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div/button').click()
+        time.sleep(t)
 
-    # 메시지 보내기 버튼 클릭
-    driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div/button').click()
-    time.sleep(t)
+        # 받는 사람 입력
+        driver.find_element_by_name('queryBox').send_keys(str(star_id))
+        time.sleep(t)
 
-    # 받는 사람 입력
-    driver.find_element_by_name('queryBox').send_keys(str(star_id))
-    time.sleep(t)
+        # 받는 사람 선택
+        driver.find_element_by_xpath('/html/body/div[5]/div/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
+        time.sleep(t)
 
-    # 받는 사람 선택
-    driver.find_element_by_xpath('/html/body/div[5]/div/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
-    time.sleep(t)
+        # 다음 선택
+        driver.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/div/div[2]/div/button').click()
+        time.sleep(t)
 
-    # 다음 선택
-    driver.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/div/div[2]/div/button').click()
-    time.sleep(t)
+        # 메시지 입력
+        input_box = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
+        driver.execute_script('arguments[0].value=arguments[1]', input_box, message(star_name))
+        input_box.send_keys(' ')
+        time.sleep(t)
 
-    # 메시지 입력
-    input_box = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
-    driver.execute_script('arguments[0].value=arguments[1]', input_box, message(star_name))
-    input_box.send_keys(' ')
-    time.sleep(t)
-
-    # 보내기
-    driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button').click()
-    time.sleep(t)
+        # 보내기
+        driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button').click()
+        time.sleep(t)

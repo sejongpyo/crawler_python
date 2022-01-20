@@ -108,12 +108,12 @@ class InformationGather:
                     data_list.append(data)
         print("\n \033[1m\033[94m[+]\033[0m All Fetching is Finished!...\n")
 
-# --------- parameter ----------
-linkedin_username = 'sjpyo@mycelebs.com'
-linkedin_password = 'welcome2019!'
-linkedin_page = 100
-data = pd.read_excel('linkedin_email_210106.xlsx')
-brand = data['brand'].to_list()
+if __name__=="__main__":
+    linkedin_username = ''
+    linkedin_password = ''
+    linkedin_page = 100
+    data = pd.read_excel('linkedin_email_210106.xlsx')
+    brand = data['brand'].to_list()
 
-getit = InformationGather(brand, linkedin_username, linkedin_password, linkedin_page)
-getit.get_selenium()
+    getit = InformationGather(brand, linkedin_username, linkedin_password, linkedin_page)
+    getit.get_selenium()

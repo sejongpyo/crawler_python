@@ -88,5 +88,6 @@ def please(start, end):
     main_df.to_excel(main)
     main.save()
 
-# for i in range(0, 1312, 500):
-please(1000, 1311)
+if __name__=="__main__":
+    # for i in range(0, 1312, 500):
+    please(1000, 1311)

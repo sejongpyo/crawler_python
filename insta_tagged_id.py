@@ -40,4 +40,5 @@ def tagged_id(name_id):
 
 	print('FINISH')
 
-tagged_id()
+if __name__=="__main__":
+	tagged_id()
