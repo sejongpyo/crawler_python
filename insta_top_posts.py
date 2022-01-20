@@ -25,11 +25,11 @@ def strange_r(x):
     return x
 # ------------------------------DB 연결---------------------------------------
 def db_connection(host_name='ds'): 
-    host_url = "db.ds.mycelebs.com"
-    user_nm = "dbteam"
-    passwd = "celebdbteam2@#"
-    port_num = 3306
-    db_name = "glamai"
+    host_url = ""
+    user_nm = ""
+    passwd = ""
+    port_num = 
+    db_name = ""
     conn = pymysql.connect(host=host_url, user=user_nm, passwd=passwd, port = port_num, 
                            charset='utf8', db = db_name, cursorclass=pymysql.cursors.DictCursor)
     instagram_sql = '''
@@ -76,8 +76,8 @@ class Reboot():
 
 if __name__=="__main__":
     today = datetime.today().strftime("%m%d")
-    egg_id = 'user'
-    egg_pw = '!InfoEgg16404'
+    egg_id = ''
+    egg_pw = ''
     data_list = []
     crawl_list = db_connection()
     egg = Reboot(egg_id, egg_pw)
